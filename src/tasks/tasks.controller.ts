@@ -8,13 +8,14 @@ import {
   HttpStatus,
   Delete,
   Patch,
-  Query
+  Query,
+  NotFoundException
 } from '@nestjs/common';
 import { Response } from 'express';
 
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
-import { TaskStatus } from './tasks.model';
+import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
@@ -27,14 +28,14 @@ export class TasksController {
   }
 
   @Get('/:id')
-  findById(@Param('id') id: string, @Res() res: Response) {
+  findById(@Param('id') id: string) {
     const task = this.tasksService.findById(id);
 
     if (task) {
-      return res.json(task);
+      return task;
     }
 
-    return res.status(HttpStatus.NOT_FOUND).json({ error: 'Task not found' });
+    throw new NotFoundException(`Task with ID "${id}" not found`);
   }
 
   @Post()
@@ -54,15 +55,15 @@ export class TasksController {
   @Patch('/:id/status')
   updateStatus(
     @Param('id') id: string,
-    @Body('status') status: TaskStatus,
-    @Res() res: Response
+    @Body() updateTaskStatusDto: UpdateTaskStatusDto
   ) {
+    const { status } = updateTaskStatusDto;
     const task = this.tasksService.updateStatus(id, status);
 
     if (task) {
-      return res.json(task);
+      return task;
     }
 
-    return res.status(HttpStatus.NOT_FOUND).json({ error: 'Task not found' });
+    throw new NotFoundException(`Task with ID "${id}" not found`);
   }
 }
