@@ -1,21 +1,18 @@
 import {
   Body,
   Controller,
-  Get,
-  Param,
-  Post,
-  Res,
-  HttpStatus,
   Delete,
+  Get,
+  HttpCode,
+  Param,
   Patch,
-  Query,
-  NotFoundException
+  Post,
+  Query
 } from '@nestjs/common';
-import { Response } from 'express';
-
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
-import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
+import { TaskStatus } from './tasks-status.enum';
+
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
@@ -23,47 +20,35 @@ export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get()
-  findAll(@Query() filtersDto: GetTasksFilterDto) {
-    return this.tasksService.findAll(filtersDto);
+  async findAll(@Query() filters: GetTasksFilterDto) {
+    return await this.tasksService.findAll(filters);
   }
 
   @Get('/:id')
-  findById(@Param('id') id: string) {
-    const task = this.tasksService.findById(id);
-
-    if (task) {
-      return task;
-    }
-
-    throw new NotFoundException(`Task with ID "${id}" not found`);
+  async findById(@Param('id') id: string) {
+    return await this.tasksService.findById(id);
   }
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto, @Res() res: Response) {
-    const task = this.tasksService.create(createTaskDto);
+  async create(@Body() createTaskDto: CreateTaskDto) {
+    const task = await this.tasksService.create(createTaskDto);
 
-    return res.status(HttpStatus.CREATED).json(task);
+    return task;
   }
 
   @Delete('/:id')
-  delete(@Param('id') id: string, @Res() res: Response) {
-    this.tasksService.delete(id);
-
-    return res.status(HttpStatus.NO_CONTENT).json({});
+  @HttpCode(204)
+  async delete(@Param('id') id: string) {
+    await this.tasksService.delete(id);
   }
 
   @Patch('/:id/status')
-  updateStatus(
+  async updateStatus(
     @Param('id') id: string,
-    @Body() updateTaskStatusDto: UpdateTaskStatusDto
+    @Body('status') status: TaskStatus
   ) {
-    const { status } = updateTaskStatusDto;
-    const task = this.tasksService.updateStatus(id, status);
+    const task = await this.tasksService.updateStatus(id, status);
 
-    if (task) {
-      return task;
-    }
-
-    throw new NotFoundException(`Task with ID "${id}" not found`);
+    return task;
   }
 }
