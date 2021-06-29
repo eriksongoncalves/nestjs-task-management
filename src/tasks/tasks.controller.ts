@@ -16,8 +16,8 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskStatus } from './tasks-status.enum';
 import { TasksService } from './tasks.service';
-import { GetUser } from '../auth/get-user.decorator';
-import { User } from '../auth/user.entity';
+import { GetUser } from '../shared/decorators/get-user.decorator';
+import { User } from '../auth/typeorm/entities/user.entity';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())

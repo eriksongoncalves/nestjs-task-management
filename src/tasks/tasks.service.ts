@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskStatus } from './tasks-status.enum';
-import { TasksRepository } from './tasks.repository';
-import { User } from '../auth/user.entity';
+import { TasksRepository } from './typeorm/repositories/tasks.repository';
+import { User } from '../auth/typeorm/entities/user.entity';
 
 @Injectable()
 export class TasksService {

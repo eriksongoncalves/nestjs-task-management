@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
 
 import { AuthCredentialsDto } from './dto/auth-credentials-dto';
-import { UsersRepository } from './users.repository';
+import { UsersRepository } from './typeorm/repositories/users.repository';
 
 @Injectable()
 export class AuthService {
