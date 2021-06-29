@@ -1,0 +1,19 @@
+{
+	"id": "cc1ab877-de18-45fc-b3ee-b18da79a4e2f",
+	"name": "Local",
+	"values": [
+		{
+			"key": "host",
+			"value": "http://localhost:3000/",
+			"enabled": true
+		},
+		{
+			"key": "token",
+			"value": "",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2021-06-29T16:10:22.099Z",
+	"_postman_exported_using": "Postman/7.36.5"
+}
